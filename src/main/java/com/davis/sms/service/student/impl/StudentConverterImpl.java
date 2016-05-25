@@ -12,7 +12,7 @@ import com.davis.sms.service.student.StudentConverter;
 public class StudentConverterImpl implements StudentConverter
 {
     @Override
-    public StudentView toView(StudentEntity entity)
+    public StudentView toView(StudentEntity entity) throws NullPointerException
     {
         Objects.requireNonNull(entity);
 
@@ -23,7 +23,7 @@ public class StudentConverterImpl implements StudentConverter
     }
 
     @Override
-    public void populateEntity(StudentEntity entity, StudentView view)
+    public void populateEntity(StudentEntity entity, StudentView view) throws NullPointerException
     {
         Objects.requireNonNull(entity);
         Objects.requireNonNull(view);
@@ -34,7 +34,7 @@ public class StudentConverterImpl implements StudentConverter
     }
 
     @Override
-    public StudentEntity toNewEntity(StudentView view)
+    public StudentEntity toNewEntity(StudentView view) throws NullPointerException
     {
         Objects.requireNonNull(view);
 

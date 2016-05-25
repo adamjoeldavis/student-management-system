@@ -3,7 +3,6 @@ package com.davis.sms.service.student.impl;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,36 +28,6 @@ public class StudentCrudServiceImpl implements StudentCrudService
         this.converter = converter;
     }
 
-    private Pair<String, String> processSearchCriteria(String criteria)
-    {
-        if (criteria == null || criteria.trim().isEmpty())
-        {
-            return Pair.of("", "");
-        }
-
-        String[] nameSplit = criteria.split(",", 2);
-
-        String lastName = nameSplit.length > 0 ? nameSplit[0] : "";
-        String firstName = nameSplit.length > 1 ? nameSplit[1] : "";
-
-        return Pair.of(lastName, firstName);
-    }
-
-    @Override
-    public StudentEntity load(String studentId)
-    {
-        Objects.requireNonNull(studentId);
-
-        StudentEntity existingEntity = repository.findByStudentId(studentId);
-        if (existingEntity == null)
-        {
-            throw new IllegalArgumentException(
-                    "No matching entity for ID = [" + studentId + "]");
-        }
-
-        return existingEntity;
-    }
-
     @Override
     public List<StudentEntity> list()
     {
@@ -73,21 +42,34 @@ public class StudentCrudServiceImpl implements StudentCrudService
             return list();
         }
 
-        Pair<String, String> lastAndFirstNameCriteria = processSearchCriteria(criteria);
-
-        return repository.findByLastNameAndFirstName(lastAndFirstNameCriteria.getLeft(),
-                lastAndFirstNameCriteria.getRight());
+        return repository.findByLastName(criteria);
     }
 
     @Override
-    public StudentEntity create(StudentView contents)
+    public StudentEntity load(String studentId)
+            throws NullPointerException, IllegalArgumentException
+    {
+        Objects.requireNonNull(studentId);
+
+        StudentEntity existingEntity = repository.findByStudentId(studentId);
+        if (existingEntity == null)
+        {
+            throw new IllegalArgumentException(
+                    "No matching entity for ID = [" + studentId + "]");
+        }
+
+        return existingEntity;
+    }
+
+    @Override
+    public StudentEntity create(StudentView contents) throws NullPointerException
     {
         return repository.saveAndFlush(converter.toNewEntity(contents));
     }
 
     @Override
     public StudentEntity update(String studentId, StudentView contents)
-            throws IllegalArgumentException
+            throws NullPointerException, IllegalArgumentException
     {
         Objects.requireNonNull(contents);
 
@@ -99,7 +81,7 @@ public class StudentCrudServiceImpl implements StudentCrudService
     }
 
     @Override
-    public void delete(String studentId)
+    public void delete(String studentId) throws NullPointerException, IllegalArgumentException
     {
         repository.delete(load(studentId));
 

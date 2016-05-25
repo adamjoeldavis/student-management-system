@@ -11,11 +11,13 @@ public interface StudentCrudService
 
     public List<StudentEntity> search(String criteria);
 
-    public StudentEntity load(String studentId);
+    public StudentEntity load(String studentId)
+            throws NullPointerException, IllegalArgumentException;
 
-    public StudentEntity create(StudentView contents);
+    public StudentEntity create(StudentView contents) throws NullPointerException;
 
-    public StudentEntity update(String studentId, StudentView contents);
+    public StudentEntity update(String studentId, StudentView contents)
+            throws NullPointerException, IllegalArgumentException;
 
-    public void delete(String studentId);
+    public void delete(String studentId) throws NullPointerException, IllegalArgumentException;
 }

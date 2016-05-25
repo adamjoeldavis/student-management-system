@@ -5,9 +5,9 @@ import com.davis.sms.domain.view.student.StudentView;
 
 public interface StudentConverter
 {
-    public void populateEntity(StudentEntity entity, StudentView view);
+    public void populateEntity(StudentEntity entity, StudentView view) throws NullPointerException;
 
-    public StudentEntity toNewEntity(StudentView view);
+    public StudentEntity toNewEntity(StudentView view) throws NullPointerException;
 
-    public StudentView toView(StudentEntity entity);
+    public StudentView toView(StudentEntity entity) throws NullPointerException;
 }

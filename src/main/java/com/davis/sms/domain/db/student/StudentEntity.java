@@ -98,4 +98,12 @@ public class StudentEntity extends EntityBase<StudentEntity, Long>
     {
         return new StudentEntity().setStudentId(studentId);
     }
+
+    public static StudentEntity create(StudentEntity source)
+    {
+        return create(source.getStudentId())
+                .setFirstName(source.getFirstName())
+                .setMiddleName(source.getMiddleName())
+                .setLastName(source.getLastName());
+    }
 }
