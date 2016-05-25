@@ -1,5 +1,7 @@
 package com.davis.sms.domain.db.student;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -18,14 +20,82 @@ public class StudentEntity extends EntityBase<StudentEntity, Long>
     private String lastName;
     private String middleName;
 
-    @SuppressWarnings("unused")
     private StudentEntity()
     {
         ; // for JPA
     }
 
-    public StudentEntity(String studentId)
+    private StudentEntity setStudentId(String studentId)
     {
         this.studentId = studentId;
+        return this;
+    }
+
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public StudentEntity setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+
+        return this;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public StudentEntity setLastName(String lastName)
+    {
+        this.lastName = lastName;
+
+        return this;
+    }
+
+    public String getMiddleName()
+    {
+        return middleName;
+    }
+
+    public StudentEntity setMiddleName(String middleName)
+    {
+        this.middleName = middleName;
+
+        return this;
+    }
+
+    public String getStudentId()
+    {
+        return studentId;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass())
+        {
+            return false;
+        }
+
+        return Objects.equals(this.getStudentId(), ((StudentEntity) other).getStudentId());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(getStudentId());
+    }
+
+    public static StudentEntity create(String studentId)
+    {
+        return new StudentEntity().setStudentId(studentId);
     }
 }

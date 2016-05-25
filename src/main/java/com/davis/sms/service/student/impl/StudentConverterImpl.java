@@ -1,29 +1,46 @@
 package com.davis.sms.service.student.impl;
 
+import java.util.Objects;
+
+import org.springframework.stereotype.Service;
+
 import com.davis.sms.domain.db.student.StudentEntity;
 import com.davis.sms.domain.view.student.StudentView;
 import com.davis.sms.service.student.StudentConverter;
 
+@Service
 public class StudentConverterImpl implements StudentConverter
 {
     @Override
     public StudentView toView(StudentEntity entity)
     {
-        // TODO Auto-generated method stub
-        return null;
+        Objects.requireNonNull(entity);
+
+        return StudentView.create(entity.getStudentId())
+                .setFirstName(entity.getFirstName())
+                .setLastName(entity.getLastName())
+                .setMiddleName(entity.getMiddleName());
     }
 
     @Override
     public void populateEntity(StudentEntity entity, StudentView view)
     {
-        // TODO Auto-generated method stub
+        Objects.requireNonNull(entity);
+        Objects.requireNonNull(view);
 
+        entity.setFirstName(view.getFirstName())
+                .setLastName(view.getLastName())
+                .setMiddleName(view.getMiddleName());
     }
 
     @Override
     public StudentEntity toNewEntity(StudentView view)
     {
-        // TODO Auto-generated method stub
-        return null;
+        Objects.requireNonNull(view);
+
+        StudentEntity entity = StudentEntity.create(view.getStudentId());
+        populateEntity(entity, view);
+
+        return entity;
     }
 }

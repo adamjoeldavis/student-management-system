@@ -37,7 +37,8 @@ public class StudentController
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/students")
-    public List<StudentView> list(@RequestParam String criteria)
+    public List<StudentView> list(
+            @RequestParam(defaultValue = "", required = false) String criteria)
     {
         return service.search(criteria).stream()
                 .map(converter::toView)
