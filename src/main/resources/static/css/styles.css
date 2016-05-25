@@ -1,0 +1,16 @@
+@CHARSET "ISO-8859-1";
+.bordered {
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    border-color: #ddd; 
+    border-style: solid;
+}
+#addStudent {
+	margin-bottom: 10px;
+}
+#studentEditPane {
+	margin-top: 5%;
+}
+.submitButtons button {
+	margin-bottom: 10px;
+}

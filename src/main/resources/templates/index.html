@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="StudentManagementApp">
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>NextGear Student Management System</title>
+
+<!-- Angular JS -->
+<script type="text/javascript"
+	th:src="@{/webjars/angularjs/angular.min.js}"
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<!-- jQuery -->
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
+<!-- My CSS -->
+<link rel="stylesheet" type="text/css" href="../static/css/styles.css"
+	th:href="@{/static/css/styles.css}"></link>
+<!-- My JS -->
+<script type="text/javascript" src="../static/js/controllers.js"
+	th:href="@{/static/js/controllers.js}"></script>
+</head>
+<body ng-controller="StudentManagementController as ctrl">
+	<div class="container-fluid">
+		<h2>Student Management System</h2>
+		<div class="col-md-3 bordered">
+			<h3>
+				Student List
+				<button type="button" id="addStudent" ng-click="ctrl.addStudent()"
+					class="btn btn-primary pull-right">Add Student</button>
+			</h3>
+			<input type="text" class="form-control"
+				placeholder="Filter by Last Name..." ng-model="ctrl.nameFilter"></input>
+			<div>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="student-row-{{student.id}}"
+							ng-repeat="student in ctrl.students"
+							ng-click="ctrl.editStudent(student.id)">
+							<td>{{student.id}}</td>
+							<td>{{student.name}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="studentEditPane" class="col-md-7 col-md-offset-1 bordered"
+			ng-show="ctrl.showEditPane()">
+			<h3>{{ctrl.editMessage}}</h3>
+			<form>
+				<div class="form-group">
+					<label for="studentId">Student ID</label> <input type="text"
+						class="form-control" id="studentId"
+						ng-model="ctrl.currentStudent.studentId" ng-readonly="ctrl.isEdit"></input>
+				</div>
+				<div class="form-group">
+					<label for="lastName">Last Name</label> <input type="text"
+						class="form-control" ng-model="ctrl.currentStudent.lastName" id="lastName"></input> <label for="firstName">First
+						Name</label> <input type="text" class="form-control" ng-model="ctrl.currentStudent.firstName" id="firstName"></input>
+					<label for="middleName">Middle Name</label> <input type="text"
+						class="form-control" ng-model="ctrl.currentStudent.middleName" id="middleName"></input>
+				</div>
+				<div class="form-group submitButtons">
+				    <button type="button" id="deleteStudent" ng-show="ctrl.isEdit" ng-click="ctrl.verifyDelete()" class="btn btn-danger pull-left">Delete</button>
+				    <button type="button" id="cancelEdit" ng-click="ctrl.clearSelectedStudent()" class="btn btn-link pull-right">Cancel</button>
+				    <button type="submit" id="saveStudent" class="btn btn-primary pull-right">Save</button>
+				    
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
