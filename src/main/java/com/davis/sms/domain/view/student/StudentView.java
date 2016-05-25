@@ -55,6 +55,12 @@ public class StudentView
         return this;
     }
 
+    @Override
+    public String toString()
+    {
+        return getStudentId();
+    }
+
     public static StudentView create(String studentId)
     {
         return new StudentView().setStudentId(studentId);

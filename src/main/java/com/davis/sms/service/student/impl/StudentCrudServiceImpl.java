@@ -3,6 +3,8 @@ package com.davis.sms.service.student.impl;
 import java.util.List;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.davis.sms.service.student.StudentCrudService;
 @Service
 public class StudentCrudServiceImpl implements StudentCrudService
 {
+    private Logger            log = LoggerFactory.getLogger(getClass());
+
     private StudentRepository repository;
     private StudentConverter  converter;
 
@@ -31,12 +35,16 @@ public class StudentCrudServiceImpl implements StudentCrudService
     @Override
     public List<StudentEntity> list()
     {
+        log.debug("list()");
+
         return repository.findAll();
     }
 
     @Override
     public List<StudentEntity> search(String criteria)
     {
+        log.debug("search({})", criteria);
+
         if (criteria == null || criteria.trim().isEmpty())
         {
             return list();
@@ -49,6 +57,8 @@ public class StudentCrudServiceImpl implements StudentCrudService
     public StudentEntity load(String studentId)
             throws NullPointerException, IllegalArgumentException
     {
+        log.debug("load({})", studentId);
+
         Objects.requireNonNull(studentId);
 
         StudentEntity existingEntity = repository.findByStudentId(studentId);
@@ -64,6 +74,8 @@ public class StudentCrudServiceImpl implements StudentCrudService
     @Override
     public StudentEntity create(StudentView contents) throws NullPointerException
     {
+        log.debug("create({})", contents);
+
         return repository.saveAndFlush(converter.toNewEntity(contents));
     }
 
@@ -71,6 +83,8 @@ public class StudentCrudServiceImpl implements StudentCrudService
     public StudentEntity update(String studentId, StudentView contents)
             throws NullPointerException, IllegalArgumentException
     {
+        log.debug("update({}, {})", studentId, contents);
+
         Objects.requireNonNull(contents);
 
         StudentEntity existingEntity = load(studentId);
@@ -83,8 +97,8 @@ public class StudentCrudServiceImpl implements StudentCrudService
     @Override
     public void delete(String studentId) throws NullPointerException, IllegalArgumentException
     {
-        repository.delete(load(studentId));
+        log.debug("delete({})", studentId);
 
-        // TODO do I need to flush?
+        repository.delete(load(studentId));
     }
 }

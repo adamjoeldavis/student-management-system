@@ -94,6 +94,12 @@ public class StudentEntity extends EntityBase<StudentEntity, Long>
         return Objects.hash(getStudentId());
     }
 
+    @Override
+    public String toString()
+    {
+        return getStudentId();
+    }
+
     public static StudentEntity create(String studentId)
     {
         return new StudentEntity().setStudentId(studentId);
