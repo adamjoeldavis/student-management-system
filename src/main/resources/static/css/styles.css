@@ -14,3 +14,6 @@
 .submitButtons button {
 	margin-bottom: 10px;
 }
+input.ng-invalid {
+	border-color: red;
+}

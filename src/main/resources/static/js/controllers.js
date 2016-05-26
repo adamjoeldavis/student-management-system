@@ -10,11 +10,18 @@ app.controller('StudentManagementController', function() {
 	this.currentStudent = {};
 
 	this.loadStudents = function() {
+		console.log('loadStudents(' + this.nameFilter + ')');
 		// TODO AJAX
+		this.students.length = 0;
 		for (var i = 0; i < 25; i++) {
-			this.students[i] = {
-				id : i,
-				name : 'Student # ' + i
+			var studentName = 'Student # ' + i;
+
+			if (!this.nameFilter || !this.nameFilter.length
+					|| studentName.startsWith(this.nameFilter)) {
+				this.students.push({
+					id : i,
+					name : 'Student # ' + i
+				});
 			}
 		}
 	};
@@ -34,7 +41,8 @@ app.controller('StudentManagementController', function() {
 	this.editStudent = function(id) {
 		this.clearSelectedStudent();
 
-		console.log('Student # ' + id + ' Clicked! (' + this.nameFilter + ')'); //TODO AJAX
+		console.log('Student # ' + id + ' Clicked! (' + this.nameFilter + ')'); // TODO
+		// AJAX
 		this.currentStudent = {
 			studentId : id
 		}
@@ -52,17 +60,40 @@ app.controller('StudentManagementController', function() {
 		this.isEdit = false;
 	};
 
+	this.submitSelectedStudent = function() {
+		// TODO ajax
+		console.log('Saving student');
+		console.log(this.currentStudent);
+
+		this.clearSelectedStudent();
+	}
+
 	this.formatStudentName = function(student) {
-		//TODO account for missing parts
-		return student.lastName + ", " + student.firstName + " "
-				+ student.middleName;
+		// TODO account for missing parts
+		var name = student.lastName;
+
+		var firstExists = student.firstName && student.firstName.length;
+		var middleExists = student.middleName && student.middleName.length;
+		if (firstExists || middleExists) {
+			name += ',';
+
+			if (firstExists) {
+				name += ' ' + student.firstName;
+			}
+
+			if (middleExists) {
+				name += ' ' + student.middleName;
+			}
+		}
+
+		return name;
 	}
 
 	this.verifyDelete = function() {
-		if (confirm("Deleting student " + this.currentStudent.studentId + "("
+		if (confirm("Deleting student " + this.currentStudent.studentId + " ("
 				+ this.formatStudentName(this.currentStudent)
 				+ ").  Are you sure?")) {
-			alert('deleted!'); //TODO AJAX
+			alert('deleted!'); // TODO AJAX
 			this.clearSelectedStudent();
 			this.loadStudents();
 		}
