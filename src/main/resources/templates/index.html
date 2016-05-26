@@ -2,26 +2,31 @@
 <html ng-app="StudentManagementApp">
 <head>
 <meta charset="ISO-8859-1"></meta>
-<title>NextGear Student Management System</title>
+<title>Student Management System</title>
 
 <!-- Angular JS -->
 <script type="text/javascript"
 	th:src="@{/webjars/angularjs/angular.min.js}"
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+	
 <!-- jQuery -->
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"
 	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
 	crossorigin="anonymous"
 	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
+	
 <!-- My CSS -->
 <link rel="stylesheet" type="text/css" href="../static/css/styles.css"
-	th:href="@{/static/css/styles.css}"></link>
+	th:href="@{/css/styles.css}"></link>
+	
 <!-- My JS -->
 <script type="text/javascript" src="../static/js/controllers.js"
-	th:href="@{/static/js/controllers.js}"></script>
+	th:src="@{/js/controllers.js}"></script>
+	
 </head>
 <body ng-controller="StudentManagementController as ctrl">
 	<div class="container-fluid">
@@ -58,16 +63,19 @@
 			<h3>{{ctrl.editMessage}}</h3>
 			<form>
 				<div class="form-group">
-					<label for="studentId">Student ID</label> <input type="text"
-						class="form-control" id="studentId"
+					<label for="studentId">Student ID</label> 
+					<input type="text" class="form-control" id="studentId"
 						ng-model="ctrl.currentStudent.studentId" ng-readonly="ctrl.isEdit"></input>
 				</div>
 				<div class="form-group">
-					<label for="lastName">Last Name</label> <input type="text"
-						class="form-control" ng-model="ctrl.currentStudent.lastName" id="lastName"></input> <label for="firstName">First
-						Name</label> <input type="text" class="form-control" ng-model="ctrl.currentStudent.firstName" id="firstName"></input>
-					<label for="middleName">Middle Name</label> <input type="text"
-						class="form-control" ng-model="ctrl.currentStudent.middleName" id="middleName"></input>
+					<label for="lastName">Last Name</label> 
+					<input type="text" class="form-control" ng-model="ctrl.currentStudent.lastName" id="lastName"></input> 
+					
+					<label for="firstName">First Name</label> 
+					<input type="text" class="form-control" ng-model="ctrl.currentStudent.firstName" id="firstName"></input>
+					
+					<label for="middleName">Middle Name</label> 
+					<input type="text" class="form-control" ng-model="ctrl.currentStudent.middleName" id="middleName"></input>
 				</div>
 				<div class="form-group submitButtons">
 				    <button type="button" id="deleteStudent" ng-show="ctrl.isEdit" ng-click="ctrl.verifyDelete()" class="btn btn-danger pull-left">Delete</button>
