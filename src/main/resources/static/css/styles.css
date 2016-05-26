@@ -17,3 +17,6 @@
 input.ng-invalid {
 	border-color: red;
 }
+.pageHeader {
+	border-bottom: 1px solid #ddd;
+}

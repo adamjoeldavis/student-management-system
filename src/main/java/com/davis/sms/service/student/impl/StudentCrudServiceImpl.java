@@ -33,6 +33,26 @@ public class StudentCrudServiceImpl implements StudentCrudService
     }
 
     @Override
+    public void reloadDemoData()
+    {
+        log.debug("reloadDemoData()");
+
+        repository.deleteAll();
+
+        repository.save(StudentEntity.create("ndrake").setFirstName("Nathan").setLastName("Drake"));
+        repository.save(StudentEntity.create("adumbledore").setFirstName("Albus")
+                .setLastName("Dumbledore").setMiddleName("Percival"));
+        repository.save(StudentEntity.create("jkirk").setFirstName("James").setLastName("Kirk")
+                .setMiddleName("Tiberius"));
+        repository.save(StudentEntity.create("wwhite").setFirstName("Walter").setLastName("White"));
+        repository.save(StudentEntity.create("edean").setFirstName("Eddie").setLastName("Dean"));
+        repository.save(
+                StudentEntity.create("rdeschain").setFirstName("Roland").setLastName("Deschain"));
+
+        repository.flush();
+    }
+
+    @Override
     public List<StudentEntity> list()
     {
         log.debug("list()");
@@ -50,7 +70,7 @@ public class StudentCrudServiceImpl implements StudentCrudService
             return list();
         }
 
-        return repository.findByLastName(criteria);
+        return repository.findByLastNameStartingWithIgnoreCase(criteria);
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.davis.sms.domain.db.student.StudentEntity;
 @Repository
 public interface StudentRepository extends JpaRepository<StudentEntity, Long>
 {
-    public List<StudentEntity> findByLastName(String lastName);
+    public List<StudentEntity> findByLastNameStartingWithIgnoreCase(String lastName);
 
     public StudentEntity findByStudentId(String id);
 }

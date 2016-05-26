@@ -20,4 +20,6 @@ public interface StudentCrudService
             throws NullPointerException, IllegalArgumentException;
 
     public void delete(String studentId) throws NullPointerException, IllegalArgumentException;
+
+    public void reloadDemoData();
 }

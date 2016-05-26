@@ -1,75 +1,92 @@
 var app = angular.module('StudentManagementApp', []);
 
-app.controller('StudentManagementController', function() {
-	this.students = [];
-	this.nameFilter = "";
+app.controller('StudentManagementController', function($http) {
+	var ctrl = this;
 
-	this.selectedStudent = false;
-	this.isEdit = false;
-	this.editMessage = "";
-	this.currentStudent = {};
+	ctrl.students = [];
+	ctrl.nameFilter = "";
 
-	this.loadStudents = function() {
-		console.log('loadStudents(' + this.nameFilter + ')');
-		// TODO AJAX
-		this.students.length = 0;
-		for (var i = 0; i < 25; i++) {
-			var studentName = 'Student # ' + i;
+	ctrl.selectedStudent = false;
+	ctrl.isEdit = false;
+	ctrl.editMessage = "";
+	ctrl.currentStudent = {};
 
-			if (!this.nameFilter || !this.nameFilter.length
-					|| studentName.startsWith(this.nameFilter)) {
-				this.students.push({
-					id : i,
-					name : 'Student # ' + i
-				});
+	ctrl.loadStudents = function() {
+		ctrl.students.length = 0;
+
+		$http.get('/students', {
+			params : {
+				lastName : ctrl.nameFilter
 			}
-		}
+		}).success(function(data) {
+			data.forEach(function(student) {
+				ctrl.students.push({
+					id : student.studentId,
+					name : ctrl.formatStudentName(student)
+				});
+			});
+		});
+	};
+	
+	ctrl.reloadDemoData = function() {
+		ctrl.clearSelectedStudent();
+		
+		$http.post('/demo').success(function() {
+			ctrl.loadStudents();
+		});
 	};
 
-	this.showEditPane = function() {
-		return this.selectedStudent !== false;
+	ctrl.showEditPane = function() {
+		return ctrl.selectedStudent !== false;
 	}
 
-	this.clearSelectedStudent = function() {
-		this.selectedStudent = false;
-		this.isEdit = false;
-		this.editMessage = "";
-		this.currentStudent = {};
+	ctrl.clearSelectedStudent = function() {
+		ctrl.selectedStudent = false;
+		ctrl.isEdit = false;
+		ctrl.editMessage = "";
+		ctrl.currentStudent = {};
 		$('tr.active').removeClass('active');
 	};
 
-	this.editStudent = function(id) {
-		this.clearSelectedStudent();
+	ctrl.editStudent = function(id) {
+		ctrl.clearSelectedStudent();
 
-		console.log('Student # ' + id + ' Clicked! (' + this.nameFilter + ')'); // TODO
-		// AJAX
-		this.currentStudent = {
-			studentId : id
-		}
-		this.selectedStudent = id;
-		this.editMessage = "Edit Existing Student";
-		this.isEdit = true;
+		$http.get('/students/' + id).success(function(data) {
+			ctrl.currentStudent = data;
+			ctrl.selectedStudent = id;
+			ctrl.editMessage = "Edit Existing Student";
+			ctrl.isEdit = true;
 
-		$('#student-row-' + id).addClass('active');
+			$('#student-row-' + id).addClass('active');
+		});
 	}
 
-	this.addStudent = function() {
-		this.clearSelectedStudent();
-		this.editMessage = "Add New Student";
-		this.selectedStudent = true;
-		this.isEdit = false;
+	ctrl.addStudent = function() {
+		ctrl.clearSelectedStudent();
+		ctrl.editMessage = "Add New Student";
+		ctrl.selectedStudent = true;
+		ctrl.isEdit = false;
 	};
 
-	this.submitSelectedStudent = function() {
-		// TODO ajax
+	ctrl.submitSelectedStudent = function() {
 		console.log('Saving student');
-		console.log(this.currentStudent);
+		console.log(ctrl.currentStudent);
 
-		this.clearSelectedStudent();
+		var onSuccess = function() {
+			ctrl.clearSelectedStudent();
+			ctrl.loadStudents();
+		};
+
+		if (ctrl.isEdit) {
+			$http.put('/students/' + ctrl.selectedStudent, ctrl.currentStudent).success(onSuccess)
+				.catch(function() { alert('Error updating student.'); });
+		} else {
+			$http.post('/students', ctrl.currentStudent).success(onSuccess)
+				.catch(function() { alert('Error adding new student. Student ID must be unique.'); });
+		}
 	}
 
-	this.formatStudentName = function(student) {
-		// TODO account for missing parts
+	ctrl.formatStudentName = function(student) {
 		var name = student.lastName;
 
 		var firstExists = student.firstName && student.firstName.length;
@@ -82,22 +99,22 @@ app.controller('StudentManagementController', function() {
 			}
 
 			if (middleExists) {
-				name += ' ' + student.middleName;
+				name += ' ' + student.middleName.charAt(0) + '.';
 			}
 		}
 
 		return name;
 	}
 
-	this.verifyDelete = function() {
-		if (confirm("Deleting student " + this.currentStudent.studentId + " ("
-				+ this.formatStudentName(this.currentStudent)
-				+ ").  Are you sure?")) {
-			alert('deleted!'); // TODO AJAX
-			this.clearSelectedStudent();
-			this.loadStudents();
+	ctrl.verifyDelete = function() {
+		if (confirm("Deleting student " + ctrl.selectedStudent + ".  Are you sure?")) {
+			$http.delete('/students/' + ctrl.selectedStudent).success(function() {
+				ctrl.clearSelectedStudent();
+				ctrl.loadStudents();
+			})
+			.catch(function() { alert('Error deleting student.'); });
 		}
 	};
 
-	this.loadStudents();
+	ctrl.loadStudents();
 });

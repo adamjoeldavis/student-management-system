@@ -2,6 +2,9 @@
 <html ng-app="StudentManagementApp">
 <head>
 <meta charset="ISO-8859-1"></meta>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <title>Student Management System</title>
 
 <!-- Angular JS -->
@@ -30,7 +33,8 @@
 </head>
 <body ng-controller="StudentManagementController as ctrl">
 	<div class="container-fluid">
-		<h2>Student Management System</h2>
+		<h2 class="pageHeader">Student Management System 
+		      <button type="button" ng-click="ctrl.reloadDemoData()" class="btn btn-link">Load Demo Data</button></h2>
 		<div class="col-md-3 bordered">
 			<h3>
 				Student List
@@ -64,12 +68,12 @@
 			<form name="studentForm" id="studentForm" ng-submit="ctrl.submitSelectedStudent()">
 				<div class="form-group">
 					<label for="studentId">Student ID</label> 
-					<input type="text" class="form-control" id="studentId" required
+					<input type="text" class="form-control" id="studentId" required="true"
 						ng-model="ctrl.currentStudent.studentId" ng-readonly="ctrl.isEdit"></input>
 				</div>
 				<div class="form-group">
 					<label for="lastName">Last Name</label> 
-					<input type="text" class="form-control" required ng-model="ctrl.currentStudent.lastName" id="lastName"></input> 
+					<input type="text" class="form-control" required="true" ng-model="ctrl.currentStudent.lastName" id="lastName"></input> 
 					
 					<label for="firstName">First Name</label> 
 					<input type="text" class="form-control" ng-model="ctrl.currentStudent.firstName" id="firstName"></input>

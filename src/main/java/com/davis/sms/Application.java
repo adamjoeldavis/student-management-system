@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Adam Davis
  */
 @SpringBootApplication
-// @EntityScan(basePackageClasses = EntityBase.class)
 public class Application
 {
     public static void main(String... args) throws Exception

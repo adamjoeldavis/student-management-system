@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,9 @@ import com.davis.sms.service.student.StudentCrudService;
 public class StudentController
 {
     private static final Comparator<StudentView> DEFAULT_DISPLAY_ORDER = comparing(
-            StudentView::getLastName)
-                    .thenComparing(comparing(StudentView::getFirstName))
-                    .thenComparing(comparing(StudentView::getMiddleName));
+            StudentView::getLastName, ObjectUtils::compare)
+                    .thenComparing(StudentView::getFirstName, ObjectUtils::compare)
+                    .thenComparing(StudentView::getMiddleName, ObjectUtils::compare);
 
     private Logger                               log                   = LoggerFactory
             .getLogger(getClass());
@@ -41,11 +44,19 @@ public class StudentController
         this.converter = converter;
     }
 
+    private void disableResponseCache(HttpServletResponse response)
+    {
+        response.setHeader("Cache-Control", "no-cache");
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/students")
     public List<StudentView> list(
-            @RequestParam(defaultValue = "", required = false) String criteria)
+            @RequestParam(name = "lastName", defaultValue = "", required = false) String criteria,
+            HttpServletResponse response)
     {
         log.debug("list({})", criteria);
+
+        disableResponseCache(response);
 
         return service.search(criteria).stream()
                 .map(converter::toView)
@@ -54,15 +65,17 @@ public class StudentController
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/students/{id}")
-    public StudentView get(@PathVariable("id") String studentId)
+    public StudentView get(@PathVariable("id") String studentId, HttpServletResponse response)
     {
         log.debug("get({})", studentId);
+
+        disableResponseCache(response);
 
         return converter.toView(service.load(studentId));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/students")
-    public StudentView add(@RequestBody StudentView contents)
+    public StudentView add(@RequestBody(required = true) StudentView contents)
     {
         log.debug("add({})", contents);
 
@@ -71,7 +84,7 @@ public class StudentController
 
     @RequestMapping(method = RequestMethod.PUT, value = "/students/{id}")
     public StudentView update(@PathVariable("id") String studentId,
-            @RequestBody StudentView contents)
+            @RequestBody(required = true) StudentView contents)
     {
         log.debug("update({}, {})", studentId, contents);
 
