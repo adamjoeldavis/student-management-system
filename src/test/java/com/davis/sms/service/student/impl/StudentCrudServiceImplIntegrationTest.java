@@ -23,7 +23,7 @@ import com.davis.sms.service.student.StudentConverter;
 import com.davis.sms.service.student.StudentCrudService;
 
 /**
- * Integration testse for the {@link StudentCrudServiceImpl} class. Spawns a
+ * Integration tests for the {@link StudentCrudServiceImpl} class. Spawns a
  * complete Spring framework, simulating a real runtime environment.
  * 
  * @author Adam Davis
