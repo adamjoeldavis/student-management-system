@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html ng-app="StudentManagementApp">
 <head>
-<meta charset="ISO-8859-1"></meta>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta http-equiv="Expires" content="0"/>
-<title>Student Management System</title>
+    <meta charset="ISO-8859-1"></meta>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>Student Management System</title>
 
-<!-- Angular JS -->
-<script type="text/javascript"
-	th:src="@{/webjars/angularjs/angular.min.js}"
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-	
-<!-- jQuery -->
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"
-	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-	
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" type="text/css"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-	crossorigin="anonymous"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
-	
-<!-- My CSS -->
-<link rel="stylesheet" type="text/css" href="../static/css/styles.css"
-	th:href="@{/css/styles.css}"></link>
-	
-<!-- My JS -->
-<script type="text/javascript" src="../static/js/controllers.js"
-	th:src="@{/js/controllers.js}"></script>
+	<!-- Angular JS -->
+	<script type="text/javascript"
+		th:src="@{/webjars/angularjs/angular.min.js}"
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		
+	<!-- jQuery -->
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"
+		src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+		crossorigin="anonymous"
+		th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
+		
+	<!-- My CSS -->
+	<link rel="stylesheet" type="text/css" href="../static/css/styles.css"
+		th:href="@{/css/styles.css}"></link>
+		
+	<!-- My JS -->
+	<script type="text/javascript" src="../static/js/controllers.js"
+		th:src="@{/js/controllers.js}"></script>
 	
 </head>
+
 <body ng-controller="StudentManagementController as ctrl">
 	<div class="container-fluid">
 		<h2 class="pageHeader">Student Management System 
@@ -53,8 +54,7 @@
 					</thead>
 					<tbody>
 						<tr id="student-row-{{student.id}}"
-							ng-repeat="student in ctrl.students"
-							ng-click="ctrl.editStudent(student.id)">
+							ng-repeat="student in ctrl.students" ng-click="ctrl.editStudent(student.id)">
 							<td>{{student.id}}</td>
 							<td>{{student.name}}</td>
 						</tr>
@@ -73,7 +73,8 @@
 				</div>
 				<div class="form-group">
 					<label for="lastName">Last Name</label> 
-					<input type="text" class="form-control" required="true" ng-model="ctrl.currentStudent.lastName" id="lastName"></input> 
+					<input type="text" class="form-control" required="true" 
+					   ng-model="ctrl.currentStudent.lastName" id="lastName"></input> 
 					
 					<label for="firstName">First Name</label> 
 					<input type="text" class="form-control" ng-model="ctrl.currentStudent.firstName" id="firstName"></input>
@@ -82,8 +83,10 @@
 					<input type="text" class="form-control" ng-model="ctrl.currentStudent.middleName" id="middleName"></input>
 				</div>
 				<div class="form-group submitButtons">
-				    <button type="button" id="deleteStudent" ng-show="ctrl.isEdit" ng-click="ctrl.verifyDelete()" class="btn btn-danger pull-left">Delete</button>
-				    <button type="button" id="cancelEdit" ng-click="ctrl.clearSelectedStudent()" class="btn btn-link pull-right">Cancel</button>
+				    <button type="button" id="deleteStudent" ng-show="ctrl.isEdit" 
+				        ng-click="ctrl.verifyDelete()" class="btn btn-danger pull-left">Delete</button>
+				    <button type="button" id="cancelEdit" ng-click="ctrl.clearSelectedStudent()" 
+				        class="btn btn-link pull-right">Cancel</button>
 				    <button type="submit" id="saveStudent" class="btn btn-primary pull-right">Save</button>
 				</div>
 			</form>

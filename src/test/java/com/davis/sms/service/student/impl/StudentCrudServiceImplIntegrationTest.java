@@ -22,29 +22,59 @@ import com.davis.sms.repository.student.StudentRepository;
 import com.davis.sms.service.student.StudentConverter;
 import com.davis.sms.service.student.StudentCrudService;
 
+/**
+ * Integration testse for the {@link StudentCrudServiceImpl} class. Spawns a
+ * complete Spring framework, simulating a real runtime environment.
+ * 
+ * @author Adam Davis
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @Transactional
 public class StudentCrudServiceImplIntegrationTest
 {
-    @Autowired
-    private StudentRepository          repository;
-
-    @Autowired
-    private StudentConverter           converter;
-
-    @Autowired
-    private StudentCrudService         service;
-
+    /**
+     * Standard "Entity #1" - saved to the database during a
+     * {@link #populateTable()} call
+     */
     private static final StudentEntity EXPECTED_ENTITY_ONE = StudentEntity.create("123")
             .setFirstName("H")
             .setMiddleName("John")
             .setLastName("Benjamin");
+
+    /**
+     * Standard "Entity #2" - saved to the database during a
+     * {@link #populateTable()} call
+     */
     private static final StudentEntity EXPECTED_ENTITY_TWO = StudentEntity.create("234")
             .setFirstName("James")
             .setMiddleName("Tiberius")
             .setLastName("Kirk");
 
+    /**
+     * Auto-wired repository, used for setting up test pre-conditions
+     */
+    @Autowired
+    private StudentRepository          repository;
+
+    /**
+     * Auto-wired view <=> entity converter, used for formatting data to pass in
+     * to methods under test
+     */
+    @Autowired
+    private StudentConverter           converter;
+
+    /**
+     * Tested service
+     */
+    @Autowired
+    private StudentCrudService         service;
+
+    /**
+     * Populates the Student table with {@link #EXPECTED_ENTITY_ONE} and
+     * {@link #EXPECTED_ENTITY_TWO} via {@link #repository}. Useful for tests
+     * where existing data is a necessary pre-condition.
+     */
     private void populateTable()
     {
         repository.save(StudentEntity.create(EXPECTED_ENTITY_ONE));
@@ -52,8 +82,22 @@ public class StudentCrudServiceImplIntegrationTest
         repository.flush();
     }
 
+    /**
+     * 
+     */
     @Test
-    public void testList()
+    public void testList_EmptyTable()
+    {
+        List<StudentEntity> foundEntities = service.list();
+
+        assertEquals(0, foundEntities.size());
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void testList_RecordsExist()
     {
         populateTable();
 
@@ -66,6 +110,9 @@ public class StudentCrudServiceImplIntegrationTest
                 .anyMatch(EXPECTED_ENTITY_TWO::equals));
     }
 
+    /**
+     * Tests both a null and empty parameter.
+     */
     @Test
     public void testSearch_NoCriteria_FindsAll()
     {
@@ -86,6 +133,9 @@ public class StudentCrudServiceImplIntegrationTest
                 .anyMatch(EXPECTED_ENTITY_TWO::equals));
     }
 
+    /**
+     * 
+     */
     @Test
     public void testSearch_MatchingCriteria_FindsOne()
     {
@@ -97,6 +147,9 @@ public class StudentCrudServiceImplIntegrationTest
         assertEquals(EXPECTED_ENTITY_TWO, foundEntities.get(0));
     }
 
+    /**
+     * 
+     */
     @Test
     public void testSearch_NonMatchingCritiera_FindsNone()
     {
@@ -106,6 +159,9 @@ public class StudentCrudServiceImplIntegrationTest
         assertEquals(0, foundEntities.size());
     }
 
+    /**
+     * 
+     */
     @Test
     public void testLoad_NullParameter_Exception()
     {
@@ -119,6 +175,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testLoad_NoMatch_Exception()
     {
@@ -134,6 +193,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testLoad_Match_ReturnsEntity()
     {
@@ -144,6 +206,10 @@ public class StudentCrudServiceImplIntegrationTest
         assertEquals(EXPECTED_ENTITY_ONE, loadedEntity);
     }
 
+    /**
+     * 
+     */
+    @Test
     public void testCreate_NullParameter_Exception()
     {
         try
@@ -156,6 +222,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testCreate_DuplicateRecord_ViolatesConstraint()
     {
@@ -173,6 +242,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testCreate_AddsNewRecord()
     {
@@ -184,6 +256,9 @@ public class StudentCrudServiceImplIntegrationTest
         assertEquals(EXPECTED_ENTITY_TWO, createdEntity);
     }
 
+    /**
+     * 
+     */
     @Test
     public void testUpdate_NullId_Exception()
     {
@@ -197,6 +272,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testUpdate_NullView_Exception()
     {
@@ -210,6 +288,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testUpdate_NoMatch_Exception()
     {
@@ -225,6 +306,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testUpdate_MatchingRecord_UpdatesCorrectly()
     {
@@ -245,6 +329,9 @@ public class StudentCrudServiceImplIntegrationTest
         assertEquals(null, reloadedEntity.getMiddleName());
     }
 
+    /**
+     * 
+     */
     @Test
     public void testDelete_NullId_Exception()
     {
@@ -258,6 +345,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testDelete_NoMatch_Exception()
     {
@@ -273,6 +363,9 @@ public class StudentCrudServiceImplIntegrationTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testDelete_MatchingId_Deleted()
     {

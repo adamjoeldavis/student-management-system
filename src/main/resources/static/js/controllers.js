@@ -1,16 +1,42 @@
 var app = angular.module('StudentManagementApp', []);
 
+/**
+ * App controller. Manages both the "list" and "edit" panes
+ */
 app.controller('StudentManagementController', function($http) {
 	var ctrl = this;
 
+	/**
+	 * List pane contents
+	 */
 	ctrl.students = [];
+	/**
+	 * List pane filter
+	 */
 	ctrl.nameFilter = "";
 
+	/**
+	 * Whether or not a student has been selected for edit or add.
+	 * If a new student is being added, this will be true.  Otherwise, it
+	 * will contain the unique ID of the student being edited
+	 */
 	ctrl.selectedStudent = false;
+	/**
+	 * Whether the "Edit" view contains an existing student (value = true) or a new student (value = false)
+	 */
 	ctrl.isEdit = false;
+	/**
+	 * Edit pane header display message.  Will be different based on isEdit status
+	 */
 	ctrl.editMessage = "";
+	/**
+	 * Model for the edit form
+	 */
 	ctrl.currentStudent = {};
 
+	/**
+	 * Loads all students from the server, applying the current value in the nameFilter field.
+	 */
 	ctrl.loadStudents = function() {
 		ctrl.students.length = 0;
 
@@ -28,6 +54,9 @@ app.controller('StudentManagementController', function($http) {
 		});
 	};
 	
+	/**
+	 * Re-sets server data to "demo mode"
+	 */
 	ctrl.reloadDemoData = function() {
 		ctrl.clearSelectedStudent();
 		
@@ -36,10 +65,16 @@ app.controller('StudentManagementController', function($http) {
 		});
 	};
 
+	/**
+	 * Whether or not we should show the edit pane
+	 */
 	ctrl.showEditPane = function() {
 		return ctrl.selectedStudent !== false;
 	}
 
+	/**
+	 * Clears the currently selected student, resetting all "edit" properties back to their defaults
+	 */
 	ctrl.clearSelectedStudent = function() {
 		ctrl.selectedStudent = false;
 		ctrl.isEdit = false;
@@ -48,6 +83,9 @@ app.controller('StudentManagementController', function($http) {
 		$('tr.active').removeClass('active');
 	};
 
+	/**
+	 * Loads the student with the given ID from the database, and populates the edit pane with the response
+	 */
 	ctrl.editStudent = function(id) {
 		ctrl.clearSelectedStudent();
 
@@ -61,6 +99,9 @@ app.controller('StudentManagementController', function($http) {
 		});
 	}
 
+	/**
+	 * Opens the edit pane for adding a new student
+	 */
 	ctrl.addStudent = function() {
 		ctrl.clearSelectedStudent();
 		ctrl.editMessage = "Add New Student";
@@ -68,7 +109,15 @@ app.controller('StudentManagementController', function($http) {
 		ctrl.isEdit = false;
 	};
 
+	/**
+	 * Submits the student currently being edited to the server, and then reloads the student list
+	 */
 	ctrl.submitSelectedStudent = function() {
+		if(!ctrl.showEditPane()) {
+			alert('No Student Selected.');
+			return;
+		}
+		
 		console.log('Saving student');
 		console.log(ctrl.currentStudent);
 
@@ -86,6 +135,9 @@ app.controller('StudentManagementController', function($http) {
 		}
 	}
 
+	/**
+	 * Formats the name fields of the given student object to the form of "Last, First M."
+	 */
 	ctrl.formatStudentName = function(student) {
 		var name = student.lastName;
 
@@ -106,7 +158,21 @@ app.controller('StudentManagementController', function($http) {
 		return name;
 	}
 
+	/**
+	 * Prompts the user to veriy they actually want to delete the current student, and upon confirmation
+	 * performs the delete. Reloads the student list on successful deletion.
+	 */
 	ctrl.verifyDelete = function() {
+		if(!ctrl.showEditPane()) {
+			alert('No Student Selected.');
+			return;
+		}
+		
+		if(!ctrl.isEdit) {
+			alert('Can\'t Delete a new Student.');
+			return;
+		}
+		
 		if (confirm("Deleting student " + ctrl.selectedStudent + ".  Are you sure?")) {
 			$http.delete('/students/' + ctrl.selectedStudent).success(function() {
 				ctrl.clearSelectedStudent();
@@ -116,5 +182,6 @@ app.controller('StudentManagementController', function($http) {
 		}
 	};
 
+	// load the students on page load
 	ctrl.loadStudents();
 });

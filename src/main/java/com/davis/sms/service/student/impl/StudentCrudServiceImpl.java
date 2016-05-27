@@ -14,14 +14,33 @@ import com.davis.sms.repository.student.StudentRepository;
 import com.davis.sms.service.student.StudentConverter;
 import com.davis.sms.service.student.StudentCrudService;
 
+/**
+ * Service implementation of the {@link StudentCrudService} interface
+ * 
+ * @author Adam Davis
+ */
 @Service
 public class StudentCrudServiceImpl implements StudentCrudService
 {
+    /**
+     * Standard logger
+     */
     private Logger            log = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Auto-wired CRUD repository
+     */
     private StudentRepository repository;
+
+    /**
+     * Auto-wired view <=> entity converter
+     */
     private StudentConverter  converter;
 
+    /**
+     * @param repository
+     * @param converter
+     */
     @Autowired
     public StudentCrudServiceImpl(StudentRepository repository, StudentConverter converter)
     {
@@ -32,6 +51,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         this.converter = converter;
     }
 
+    /**
+     * 
+     */
     @Override
     public void reloadDemoData()
     {
@@ -52,6 +74,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         repository.flush();
     }
 
+    /**
+     * 
+     */
     @Override
     public List<StudentEntity> list()
     {
@@ -60,6 +85,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         return repository.findAll();
     }
 
+    /**
+     * 
+     */
     @Override
     public List<StudentEntity> search(String criteria)
     {
@@ -73,6 +101,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         return repository.findByLastNameStartingWithIgnoreCase(criteria);
     }
 
+    /**
+     * 
+     */
     @Override
     public StudentEntity load(String studentId)
             throws NullPointerException, IllegalArgumentException
@@ -91,6 +122,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         return existingEntity;
     }
 
+    /**
+     * 
+     */
     @Override
     public StudentEntity create(StudentView contents) throws NullPointerException
     {
@@ -99,6 +133,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         return repository.saveAndFlush(converter.toNewEntity(contents));
     }
 
+    /**
+     * 
+     */
     @Override
     public StudentEntity update(String studentId, StudentView contents)
             throws NullPointerException, IllegalArgumentException
@@ -114,6 +151,9 @@ public class StudentCrudServiceImpl implements StudentCrudService
         return repository.saveAndFlush(existingEntity);
     }
 
+    /**
+     * 
+     */
     @Override
     public void delete(String studentId) throws NullPointerException, IllegalArgumentException
     {

@@ -10,11 +10,22 @@ import com.davis.sms.domain.db.student.StudentEntity;
 import com.davis.sms.domain.view.student.StudentView;
 import com.davis.sms.service.student.StudentConverter;
 
+/**
+ * Service implementation of the {@link StudentConverter} interface
+ * 
+ * @author Adam Davis
+ */
 @Service
 public class StudentConverterImpl implements StudentConverter
 {
+    /**
+     * Standard logger
+     */
     private Logger log = LoggerFactory.getLogger(getClass());
 
+    /**
+     * 
+     */
     @Override
     public StudentView toView(StudentEntity entity) throws NullPointerException
     {
@@ -28,6 +39,9 @@ public class StudentConverterImpl implements StudentConverter
                 .setMiddleName(entity.getMiddleName());
     }
 
+    /**
+     * 
+     */
     @Override
     public void populateEntity(StudentEntity entity, StudentView view) throws NullPointerException
     {
@@ -41,6 +55,9 @@ public class StudentConverterImpl implements StudentConverter
                 .setMiddleName(view.getMiddleName());
     }
 
+    /**
+     * 
+     */
     @Override
     public StudentEntity toNewEntity(StudentView view) throws NullPointerException
     {

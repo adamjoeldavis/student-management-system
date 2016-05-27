@@ -8,8 +8,16 @@ import org.junit.Test;
 import com.davis.sms.domain.db.student.StudentEntity;
 import com.davis.sms.domain.view.student.StudentView;
 
+/**
+ * Unit tests for the {@link StudentConverterImpl} class
+ * 
+ * @author Adam Davis
+ */
 public class StudentConverterImplTest
 {
+    /**
+     * 
+     */
     @Test
     public void testToView_NullParameter_Exception()
     {
@@ -25,6 +33,9 @@ public class StudentConverterImplTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testToView_ValidParameter_Matches()
     {
@@ -43,6 +54,9 @@ public class StudentConverterImplTest
         assertEquals(expected.getStudentId(), actual.getStudentId());
     }
 
+    /**
+     * 
+     */
     @Test
     public void testPopulateEntity_NullEntity_Exception()
     {
@@ -58,6 +72,9 @@ public class StudentConverterImplTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testPopulateEntity_NullView_Exception()
     {
@@ -73,6 +90,9 @@ public class StudentConverterImplTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testPopulateEntity_ValidParameters_Matches()
     {
@@ -91,6 +111,9 @@ public class StudentConverterImplTest
         assertEquals(expected.getMiddleName(), actual.getMiddleName());
     }
 
+    /**
+     * 
+     */
     @Test
     public void testToNewEntity_NullParameter_Exception()
     {
@@ -106,6 +129,9 @@ public class StudentConverterImplTest
         }
     }
 
+    /**
+     * 
+     */
     @Test
     public void testToNewEntity_ValidParameter_Matches()
     {
